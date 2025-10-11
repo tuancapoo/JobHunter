@@ -55,15 +55,16 @@ public class SecurityConfiguration {
                 )
 
                 //giup chạy vào globleexcetion
-                .exceptionHandling(
-                        exceptions -> exceptions
-                            .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint()) //401
-                            .accessDeniedHandler(new BearerTokenAccessDeniedHandler())) //403
+//                .exceptionHandling(
+//                        exceptions -> exceptions
+//                            .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint()) //401
+//                            .accessDeniedHandler(new BearerTokenAccessDeniedHandler())) //403
                 .formLogin(form -> form.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
+
     private SecretKey getSecretKey() {
         byte[] keyBytes = Base64.from(jwtKey).decode();
         return new SecretKeySpec(keyBytes, 0, keyBytes.length, SecurityUtil.JWT_ALOGORITHM.getName());

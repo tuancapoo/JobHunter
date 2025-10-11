@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name="users")
 public class User {
+    ////attribute/////
+    ///
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private int id;
@@ -20,6 +22,12 @@ public class User {
     @NotBlank(message = "Email không được để trống")
     @Email(message = "Email không đúng định dạng", regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
     private String email;
+    //
+    /////////mapping////////
+    ///
+
+    ///
+    ////////method///////////
 
     public int getId() {
         return id;
@@ -62,4 +70,6 @@ public class User {
                 ", email='" + email + '\'' +
                 '}';
     }
+
+
 }

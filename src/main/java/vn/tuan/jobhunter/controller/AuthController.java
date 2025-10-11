@@ -33,7 +33,7 @@ public class AuthController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         //create a token
-        String access_token=authentication.getCredentials().toString();
+        String access_token=securityUtil.createToken(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         ApiResponse<String> response=new ApiResponse<>(HttpStatus.CREATED,"Call API success",access_token,null);

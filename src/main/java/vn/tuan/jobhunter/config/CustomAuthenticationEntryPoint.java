@@ -16,6 +16,7 @@ import vn.tuan.jobhunter.domain.ApiResponse;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Optional;
 
 
 @Component
@@ -34,9 +35,11 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         this.delegate.commence(request, response, authException);
         response.setContentType("application/json;charset=UTF-8");
         ApiResponse<Object> problemDetail = new ApiResponse<>();
-
+        String errorMessage= Optional.ofNullable(authException.getCause())
+                        .map(Throwable::getMessage)
+                        .orElse(authException.getMessage());
         problemDetail.setStatus(Integer.toString(HttpStatus.UNAUTHORIZED.value()));
-        problemDetail.setErrorCode(authException.getCause().getMessage());
+        problemDetail.setErrorCode(errorMessage);
         problemDetail.setMessage("Token invalid");
         mapper.writeValue(response.getWriter(), problemDetail);
 
