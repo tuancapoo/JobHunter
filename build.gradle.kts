@@ -32,6 +32,9 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 	implementation(kotlin("stdlib-jdk8"))
+	annotationProcessor("org.hibernate.orm:hibernate-jpamodelgen:6.4.0.Final")
+	//filter
+	implementation("com.turkraft.springfilter:jpa:3.1.7")
 }
 
 tasks.withType<Test> {

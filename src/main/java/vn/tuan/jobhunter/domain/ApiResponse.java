@@ -5,29 +5,29 @@ import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 
 public class ApiResponse<T> {
-    private String status;
+    private String statusCode;
     private String message;
     private T data;
-    private String errorCode;
+    private String error;
     private LocalDateTime timestamp = LocalDateTime.now();
 
     public ApiResponse() {
     }
 
-    public ApiResponse(HttpStatus httpStatus, String message, T data, String errorCode) {
-        this.status = httpStatus.is2xxSuccessful() ? "success" : "error";
+    public ApiResponse(HttpStatus httpStatus, String message, T data, String error) {
+        this.statusCode = String.valueOf(httpStatus.value());
         this.message = message;
         this.data = data;
-        this.errorCode = errorCode;
+        this.error = error;
         this.timestamp = LocalDateTime.now();
     }
 
-    public String getStatus() {
-        return status;
+    public String getStatusCode() {
+        return statusCode;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
     }
 
     public String getMessage() {
@@ -46,12 +46,12 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
-    public String getErrorCode() {
-        return errorCode;
+    public String getError() {
+        return error;
     }
 
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
+    public void setError(String error) {
+        this.error = error;
     }
 
     public LocalDateTime getTimestamp() {

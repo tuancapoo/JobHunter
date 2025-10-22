@@ -1,0 +1,5 @@
+### GET request to example server
+GET  localhost:8080/api/v1/users?page=0&size=50
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJIdXllbkBnbWFpbC5jb20iLCJleHAiOjE3NjExMzg5NzksImlhdCI6MTc2MTA1MjU3OSwidXNlciI6eyJpZCI6MTAsImVtYWlsIjoiSHV5ZW5AZ21haWwuY29tIiwidXNlcm5hbWUiOiJIdXllbiJ9fQ.LhxAfgKvZy9TVbh-er5WwHtDG2gGdBPUHU6KjDFgJI5CZjfO2l8oysLfiyxRyfShj-xWocItBcYyPZa175kthQ
+
+###

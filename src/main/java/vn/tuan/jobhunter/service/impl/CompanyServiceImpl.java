@@ -2,14 +2,16 @@ package vn.tuan.jobhunter.service.impl;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vn.tuan.jobhunter.domain.Company;
-import vn.tuan.jobhunter.domain.dto.Meta;
-import vn.tuan.jobhunter.domain.dto.ResultPaginationDTO;
+import vn.tuan.jobhunter.domain.dto.responseDTO.Meta;
+import vn.tuan.jobhunter.domain.dto.responseDTO.ResultPaginationDTO;
+import vn.tuan.jobhunter.domain.dto.criterial.CompanyCriteriaDTO;
 import vn.tuan.jobhunter.repository.CompanyRepository;
 import vn.tuan.jobhunter.service.CompanyService;
+import vn.tuan.jobhunter.service.specification.CompanySpecification;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -25,18 +27,20 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public ResultPaginationDTO getAllCompanies(Pageable pageable) {
-        Page<Company> pageCompanies = companyRepository.findAll(pageable);
-        ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
-        Meta mt=new Meta();
-        mt.setPage(pageCompanies.getNumber());
-        mt.setPageSize(pageCompanies.getSize());
+    public ResultPaginationDTO getAllCompanies(CompanyCriteriaDTO companyCriteriaDTO, Pageable pageable) {
+        Specification<Company> spec=CompanySpecification.companySpecification(companyCriteriaDTO);
+        Page<Company> pageCompanies = companyRepository.findAll(spec,pageable);
 
+
+        Meta mt=new Meta();
+        mt.setPage(pageCompanies.getNumber()+1);
+        mt.setPageSize(pageCompanies.getSize());
         mt.setPages(pageCompanies.getTotalPages());
         mt.setTotal(pageCompanies.getNumberOfElements());
 
+        ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
         resultPaginationDTO.setMeta(mt);
-        resultPaginationDTO.setObject(pageCompanies.getContent());
+        resultPaginationDTO.setResult(pageCompanies.getContent());
         return resultPaginationDTO;
     }
 
@@ -47,10 +51,9 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company updateCompany(Long id, Company updatedCompany) {
+    public Company updateCompany(Company updatedCompany) {
 
-
-        return companyRepository.findById(id)
+        return companyRepository.findById(Long.valueOf(updatedCompany.getId()))
                 .map(company -> {
                     if (updatedCompany.getAddress() != null)
                         company.setAddress(updatedCompany.getAddress());
@@ -71,4 +74,19 @@ public class CompanyServiceImpl implements CompanyService {
         }
         companyRepository.deleteById(id);
     }
+
+    @Override
+    public ResultPaginationDTO getAllCompanies(Specification<Company> spec, Pageable pageable) {
+        Page<Company> pageCompanies = companyRepository.findAll(spec,pageable);
+
+        Meta mt=new Meta();
+        mt.setPage(pageCompanies.getNumber()+1);
+        mt.setPageSize(pageCompanies.getSize());
+        mt.setPages(pageCompanies.getTotalPages());
+        mt.setTotal(pageCompanies.getNumberOfElements());
+
+        ResultPaginationDTO resultPaginationDTO = new ResultPaginationDTO();
+        resultPaginationDTO.setMeta(mt);
+        resultPaginationDTO.setResult(pageCompanies.getContent());
+        return resultPaginationDTO;    }
 }

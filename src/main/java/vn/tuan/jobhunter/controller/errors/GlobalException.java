@@ -27,13 +27,15 @@ public class GlobalException {
     /*
      * handle the rest exceptions
      */
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ApiResponse<?>> handleAllException(Exception ex) {
-//        var result = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), null,
-//                "INTERNAL_SERVER_ERROR");
-//
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-//    }
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ApiResponse<?>> handleCustomException(CustomException ex) {
+        ApiResponse<Object> res=new ApiResponse<>();
+        res.setStatusCode(Integer.toString(HttpStatus.BAD_REQUEST.value()));
+        res.setError(ex.getMessage());
+        res.setMessage(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -41,7 +43,7 @@ public class GlobalException {
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.toList());
         String errors = String.join("; ", errorList);
-        ApiResponse<Object> response = new ApiResponse<>(HttpStatus.BAD_REQUEST, errors, null, "VALIDATION_ERROR");
+        ApiResponse<Object> response = new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, errors, null, "VALIDATION_ERROR");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -51,11 +53,12 @@ public class GlobalException {
     })
     public ResponseEntity<ApiResponse<Object>> handleIdExeption(Exception ex) {
         ApiResponse<Object> res=new ApiResponse<>();
-        res.setStatus(Integer.toString(HttpStatus.BAD_REQUEST.value()));
-        res.setErrorCode(ex.getMessage());
+        res.setStatusCode(Integer.toString(HttpStatus.BAD_REQUEST.value()));
+        res.setError(ex.getMessage());
         res.setMessage("Thông tin đăng nhập không hợp lệ ...");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
 
 
     }
+
 }

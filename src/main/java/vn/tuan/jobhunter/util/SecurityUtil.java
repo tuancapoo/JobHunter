@@ -3,21 +3,21 @@ package vn.tuan.jobhunter.util;
 import com.nimbusds.jose.util.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
+import vn.tuan.jobhunter.domain.dto.responseDTO.ResLoginDTO;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 public class SecurityUtil {
@@ -25,31 +25,72 @@ public class SecurityUtil {
 
     @Value("${tuan.jwt.base64-secret}")
     private String jwtKey;
-    @Value("${tuan.jwt.token-validity-in-seconds}")
-    private Long jwtExpirationInSeconds;
+    @Value("${tuan.jwt.access-token-validity-in-seconds}")
+    private Long accessTokenExpirationInSeconds;
+    @Value("${tuan.jwt.refresh-token-validity-in-seconds}")
+    private Long refreshTokenExpirationInSeconds;
+
     public static final MacAlgorithm JWT_ALOGORITHM=MacAlgorithm.HS512;
 
     public SecurityUtil(JwtEncoder jwtEncoder) {
         this.jwtEncoder = jwtEncoder;
     }
 
-    public String createToken(Authentication authentication) {
+    public String createAccessToken(String email,ResLoginDTO.UserLogin dto) {
         Instant now = Instant.now();
-        Instant validity = now.plus(jwtExpirationInSeconds, ChronoUnit.SECONDS);
+        Instant validity = now.plus(accessTokenExpirationInSeconds, ChronoUnit.SECONDS);
 
-
+        //hardcode permission
+        List<String> listAuthorities = new ArrayList<String>();
+        listAuthorities.add("ROLE_USER_CREATE");
+        listAuthorities.add("ROLE_USER_UPDATE");
         // @formatter:off
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuedAt(now)
                 .expiresAt(validity)
-                .subject(authentication.getName())
-                .claim("tuan", authentication)
+                .subject(email)
+                .claim("user", dto)
+                .claim("permission", listAuthorities)
                 .build();
 
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALOGORITHM).build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
 
     }
+    public String createRefreshToken(String email,ResLoginDTO resLoginDTO) {
+        Instant now = Instant.now();
+        Instant validity = now.plus(refreshTokenExpirationInSeconds, ChronoUnit.SECONDS);
+
+
+        // @formatter:off
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuedAt(now)
+                .expiresAt(validity)
+                .subject(email)
+                .claim("user", resLoginDTO.getUser())
+                .build();
+
+        JwsHeader jwsHeader = JwsHeader.with(JWT_ALOGORITHM).build();
+        return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+
+    }
+
+    private SecretKey getSecretKey() {
+        byte[] keyBytes = Base64.from(jwtKey).decode();
+        return new SecretKeySpec(keyBytes, 0, keyBytes.length, JWT_ALOGORITHM.getName());
+    }
+    public Jwt checkValidRefreshToken(String token){
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(
+                getSecretKey()).macAlgorithm(SecurityUtil.JWT_ALOGORITHM).build();
+        try{
+            return jwtDecoder.decode(token);
+        }catch (Exception e) {
+            System.out.println("refresh_Token error:"+e.getMessage());
+            throw e;
+        }
+    }
+
+
     public static Optional<String> getCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(extractPrincipal(securityContext.getAuthentication()));

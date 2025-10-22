@@ -1,21 +1,18 @@
 package vn.tuan.jobhunter.controller;
 
+import com.turkraft.springfilter.boot.Filter;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.tuan.jobhunter.domain.ApiResponse;
 import vn.tuan.jobhunter.domain.Company;
-import vn.tuan.jobhunter.domain.User;
-import vn.tuan.jobhunter.domain.dto.ResultPaginationDTO;
-import vn.tuan.jobhunter.repository.CompanyRepository;
+import vn.tuan.jobhunter.domain.dto.responseDTO.ResultPaginationDTO;
 import vn.tuan.jobhunter.service.CompanyService;
 
-import java.util.List;
-import java.util.Optional;
-
+@RequestMapping("/api/v1")
 @RestController
 public class CompanyController {
     private final CompanyService companyService;
@@ -32,20 +29,13 @@ public class CompanyController {
 
     @GetMapping("/companies")
     public ResponseEntity<ApiResponse<ResultPaginationDTO>> getAllCompanies(
-            @RequestParam("current") Optional<String> currentOptional,
-            @RequestParam("pageSize") Optional<String> pageSizeOptional) {
-        String scurrent=currentOptional.orElse("");
-        String spageSize=pageSizeOptional.orElse("");
-
-        int pageNumber=Integer.parseInt(scurrent)-1;
-        int pageSize=Integer.parseInt(spageSize);
-
-        Pageable pageable=PageRequest.of(pageNumber,pageSize);
-
-        ResultPaginationDTO companies = companyService.getAllCompanies(pageable);
-
-
-
+            @Filter Specification<Company> spec,
+            Pageable pageable
+            //@ModelAttribute CompanyCriteriaDTO companyCriteriaDTO
+    ) {
+        //ResultPaginationDTO companies = companyService.getAllCompanies(companyCriteriaDTO,pageable);
+        ResultPaginationDTO companies = companyService.getAllCompanies(spec,pageable);
+        System.out.println(companies);
 
         ApiResponse<ResultPaginationDTO> response=new ApiResponse<ResultPaginationDTO>(HttpStatus.OK,"get all companies",companies,null);
         return ResponseEntity.ok().body(response);
@@ -62,12 +52,12 @@ public class CompanyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         });
     }
-    @PutMapping("/companies/{id}")
-    public ResponseEntity<ApiResponse<Company>> updateCompany(@PathVariable Long id, @Valid @RequestBody Company company) {
-        Company updated=companyService.updateCompany(id,company);
+    @PutMapping("/companies")
+    public ResponseEntity<ApiResponse<Company>> updateCompany(@Valid @RequestBody Company company) {
+
+        Company updated=companyService.updateCompany(company);
         ApiResponse<Company> response=new ApiResponse<>(HttpStatus.OK,"update successful",updated,null);
         return ResponseEntity.ok().body(response);
-
     }
     @DeleteMapping("companies/{id}")
     public ResponseEntity<ApiResponse<Company>> deleteCompany(@PathVariable Long id) {

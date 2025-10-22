@@ -28,24 +28,24 @@ public class Company {
 
 
     private String address;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
-    private Instant createAt;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
-    private Instant updateAt;
-    private  String createBy;
-    private  String updateBy;
+    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    private Instant createdAt;
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    private Instant updatedAt;
+    private  String createdBy;
+    private  String updatedBy;
 
     @PrePersist
     public void handleCreateAt() {
-        this.createAt = Instant.now();
-        this.createBy = SecurityUtil.getCurrentUserLogin().isPresent()==true?
+        this.createdAt = Instant.now();
+        this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent()==true?
                 SecurityUtil.getCurrentUserLogin().get():null;
 
     }
     @PreUpdate
     public void handleUpdateAt() {
-        this.updateAt = Instant.now();
-        this.updateBy =SecurityUtil.getCurrentUserLogin().isPresent()==true?
+        this.updatedAt = Instant.now();
+        this.updatedBy =SecurityUtil.getCurrentUserLogin().isPresent()==true?
                 SecurityUtil.getCurrentUserLogin().get():null;
     }
 
