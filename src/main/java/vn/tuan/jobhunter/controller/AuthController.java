@@ -13,7 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import vn.tuan.jobhunter.controller.errors.CustomException;
-import vn.tuan.jobhunter.domain.ApiResponse;
+import vn.tuan.jobhunter.domain.response.ApiResponse;
 import vn.tuan.jobhunter.domain.User;
 import vn.tuan.jobhunter.domain.request.requestLoginDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResLoginDTO;

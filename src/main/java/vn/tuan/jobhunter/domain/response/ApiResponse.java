@@ -1,4 +1,4 @@
-package vn.tuan.jobhunter.domain;
+package vn.tuan.jobhunter.domain.response;
 
 import java.time.LocalDateTime;
 

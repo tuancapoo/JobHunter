@@ -11,7 +11,7 @@ import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResCreateUserDT
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResUserDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResultPaginationDTO;
 import vn.tuan.jobhunter.service.UserService;
-import vn.tuan.jobhunter.domain.ApiResponse;
+import vn.tuan.jobhunter.domain.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import vn.tuan.jobhunter.util.annotation.ApiMessage;
