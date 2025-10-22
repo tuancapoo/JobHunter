@@ -1,4 +1,4 @@
-package vn.tuan.jobhunter.domain.dto;
+package vn.tuan.jobhunter.domain.dto.responseDTO;
 
 
 import lombok.Getter;
@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 public class ResultPaginationDTO {
     private Meta meta;
-    private Object object;
+    private Object result;
 }

@@ -1,9 +1,8 @@
-package vn.tuan.jobhunter.domain.dto;
+package vn.tuan.jobhunter.domain.dto.responseDTO;
 
-import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;
 
-public class LoginDTO {
+public class requestLoginDTO {
     @NotBlank(message = "Khong duoc de trong username")
     public String username;
     @NotBlank(message = "Khong duoc de trong password")
