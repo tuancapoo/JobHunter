@@ -6,7 +6,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.tuan.jobhunter.domain.User;
-import vn.tuan.jobhunter.domain.dto.responseDTO.Meta;
 import vn.tuan.jobhunter.domain.dto.responseDTO.userDTO.ResCreateUserDTO;
 import vn.tuan.jobhunter.domain.dto.responseDTO.userDTO.ResUserDTO;
 import vn.tuan.jobhunter.domain.dto.responseDTO.ResultPaginationDTO;
@@ -59,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
         ResultPaginationDTO resultPaginationDTO=new ResultPaginationDTO();
 
-        Meta mt=new Meta();
+        ResultPaginationDTO.Meta mt=new ResultPaginationDTO.Meta();
         mt.setPage(page.getNumber()+1);
         mt.setPageSize(page.getSize());
 
@@ -161,7 +160,7 @@ public class UserServiceImpl implements UserService {
 
         ResultPaginationDTO resultPaginationDTO=new ResultPaginationDTO();
 
-        Meta mt=new Meta();
+        ResultPaginationDTO.Meta mt=new ResultPaginationDTO.Meta();
         mt.setPage(page.getNumber()+1);
         mt.setPageSize(page.getSize());
 
