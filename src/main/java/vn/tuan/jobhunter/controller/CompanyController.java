@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.tuan.jobhunter.domain.ApiResponse;
 import vn.tuan.jobhunter.domain.Company;
-import vn.tuan.jobhunter.domain.dto.responseDTO.ResultPaginationDTO;
+import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResultPaginationDTO;
 import vn.tuan.jobhunter.service.CompanyService;
 
 @RequestMapping("/api/v1")

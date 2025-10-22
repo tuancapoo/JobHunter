@@ -7,9 +7,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
 import vn.tuan.jobhunter.domain.User;
-import vn.tuan.jobhunter.domain.dto.responseDTO.userDTO.ResCreateUserDTO;
-import vn.tuan.jobhunter.domain.dto.responseDTO.userDTO.ResUserDTO;
-import vn.tuan.jobhunter.domain.dto.responseDTO.ResultPaginationDTO;
+import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResCreateUserDTO;
+import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResUserDTO;
+import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResultPaginationDTO;
 import vn.tuan.jobhunter.service.UserService;
 import vn.tuan.jobhunter.domain.ApiResponse;
 import org.springframework.http.ResponseEntity;

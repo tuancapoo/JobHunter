@@ -1,4 +1,4 @@
-package vn.tuan.jobhunter.domain.dto.criterial;
+package vn.tuan.jobhunter.domain.response.dto.criterial;
 
 import lombok.Getter;
 import lombok.Setter;

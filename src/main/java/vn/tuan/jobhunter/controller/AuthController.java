@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import vn.tuan.jobhunter.controller.errors.CustomException;
 import vn.tuan.jobhunter.domain.ApiResponse;
 import vn.tuan.jobhunter.domain.User;
-import vn.tuan.jobhunter.domain.dto.responseDTO.requestLoginDTO;
-import vn.tuan.jobhunter.domain.dto.responseDTO.ResLoginDTO;
+import vn.tuan.jobhunter.domain.request.requestLoginDTO;
+import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResLoginDTO;
 import vn.tuan.jobhunter.service.UserService;
 import vn.tuan.jobhunter.util.SecurityUtil;
 

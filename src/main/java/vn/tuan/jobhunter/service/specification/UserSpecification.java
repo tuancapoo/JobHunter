@@ -2,7 +2,7 @@ package vn.tuan.jobhunter.service.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 import vn.tuan.jobhunter.domain.User;
-import vn.tuan.jobhunter.domain.dto.criterial.UserCriteriaDTO;
+import vn.tuan.jobhunter.domain.response.dto.criterial.UserCriteriaDTO;
 
 public class UserSpecification {
     public static Specification<User> userSpecification(UserCriteriaDTO dto) {

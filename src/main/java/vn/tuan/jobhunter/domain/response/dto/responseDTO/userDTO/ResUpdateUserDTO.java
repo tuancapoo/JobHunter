@@ -1,4 +1,4 @@
-package vn.tuan.jobhunter.domain.dto.responseDTO.userDTO;
+package vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

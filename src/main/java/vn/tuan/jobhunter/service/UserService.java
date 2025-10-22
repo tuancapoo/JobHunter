@@ -2,10 +2,10 @@ package vn.tuan.jobhunter.service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import vn.tuan.jobhunter.domain.dto.responseDTO.userDTO.ResCreateUserDTO;
-import vn.tuan.jobhunter.domain.dto.responseDTO.userDTO.ResUserDTO;
-import vn.tuan.jobhunter.domain.dto.responseDTO.ResultPaginationDTO;
-import vn.tuan.jobhunter.domain.dto.criterial.UserCriteriaDTO;
+import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResCreateUserDTO;
+import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResUserDTO;
+import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResultPaginationDTO;
+import vn.tuan.jobhunter.domain.response.dto.criterial.UserCriteriaDTO;
 import vn.tuan.jobhunter.domain.User;
 
 import java.util.Optional;

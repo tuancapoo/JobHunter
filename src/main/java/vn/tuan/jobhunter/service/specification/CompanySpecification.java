@@ -2,7 +2,7 @@ package vn.tuan.jobhunter.service.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 import vn.tuan.jobhunter.domain.Company;
-import vn.tuan.jobhunter.domain.dto.criterial.CompanyCriteriaDTO;
+import vn.tuan.jobhunter.domain.response.dto.criterial.CompanyCriteriaDTO;
 
 public class CompanySpecification {
 
