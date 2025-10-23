@@ -1,42 +1,42 @@
 package vn.tuan.jobhunter.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import vn.tuan.jobhunter.util.SecurityUtil;
+import vn.tuan.jobhunter.util.constant.LevelEnum;
 
 import java.time.Instant;
 import java.util.List;
 
+
 @Entity
-@Table(name="companies")
+@Table(name="jobs")
 @Getter
 @Setter
-
-public class Company {
+public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotBlank(message = "name khong de trong")
     private String name;
+    private String location;
+    private String salary;
+    private int quantity;
+    @Enumerated(EnumType.STRING)
+    private LevelEnum level;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "Text")
     private String description;
-    private String logo;
 
-
-    private String address;
-    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    private Instant startDate;
+    private Instant endDate;
+    private boolean isActive;
     private Instant createdAt;
-    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
     private Instant updatedAt;
-    private  String createdBy;
-    private  String updatedBy;
+    private String createdBy;
+    private String updatedBy;
 
     @PrePersist
     public void handleCreateAt() {
@@ -54,14 +54,16 @@ public class Company {
 
     /////////mapping////////
     ///
-    // 1 Company- N User
-    @OneToMany(mappedBy = "company")
+    // N Job - 1 Company
+    @ManyToOne
+    @JoinColumn(name="company_id")
+    private Company company;
+    // N Job - N Company
+    @ManyToMany
     @JsonIgnore
-    List<User> users;
-    // 1 Company - N Job
-    @OneToMany(mappedBy = "company")
-    @JsonIgnore
-    List<Job> jobs;
+    @JoinTable(name="job_skill",joinColumns =@JoinColumn(name="job_id"),
+    inverseJoinColumns = @JoinColumn(name="skill_id"))
+    private List<Skill> skills;
 
 
 

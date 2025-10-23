@@ -63,12 +63,10 @@ public class User {
 
     //
     /////////mapping////////
-    ///
-
-    ///
-    ////////method///////////
-
-
+    // N User - 1 Company
+    @ManyToOne
+    @JoinColumn(name="company_id")
+    private Company company;
 
 
 }

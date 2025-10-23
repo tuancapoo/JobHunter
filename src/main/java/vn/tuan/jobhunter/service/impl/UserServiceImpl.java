@@ -5,12 +5,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import vn.tuan.jobhunter.domain.Company;
 import vn.tuan.jobhunter.domain.User;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResCreateUserDTO;
+import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResUpdateUserDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResUserDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResultPaginationDTO;
 import vn.tuan.jobhunter.domain.response.dto.criterial.UserCriteriaDTO;
+import vn.tuan.jobhunter.repository.CompanyRepository;
 import vn.tuan.jobhunter.repository.UserRepository;
+import vn.tuan.jobhunter.service.CompanyService;
 import vn.tuan.jobhunter.service.specification.UserSpecification;
 import vn.tuan.jobhunter.service.UserService;
 
@@ -25,15 +29,21 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    private final CompanyService companyService;
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, CompanyService companyService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.companyService = companyService;
     }
 
     @Override
     public ResCreateUserDTO createUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())){
             throw new RuntimeException("User already exists");
+        }
+        if (user.getCompany()!=null){
+            Optional<Company> companyOptional=this.companyService.getCompanyById(Long.valueOf(user.getCompany().getId()));
+            user.setCompany(companyOptional.isPresent()?companyOptional.get():null);
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -53,7 +63,13 @@ public class UserServiceImpl implements UserService {
                         item.getUpdatedAt(),
                         item.getCreatedAt(),
                         item.getGender(),
-                        item.getAddress()))
+                        item.getAddress(),
+                        item.getCompany() != null
+                                ? new ResUserDTO.CompanyUser(
+                                item.getCompany().getId(),
+                                item.getCompany().getName()
+                        )
+                                : null))
                 .collect(Collectors.toList());
 
         ResultPaginationDTO resultPaginationDTO=new ResultPaginationDTO();
@@ -78,7 +94,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User updatedUser) {
-        return userRepository.findById(Long.valueOf(updatedUser.getId()))
+         User currentUser=userRepository.findById(Long.valueOf(updatedUser.getId()))
                 .map(user -> {
                     if (updatedUser.getUsername()!=null)
                         user.setUsername(updatedUser.getUsername());
@@ -90,8 +106,13 @@ public class UserServiceImpl implements UserService {
                         user.setAge(updatedUser.getAge());
                     if (updatedUser.getGender()!=null)
                         user.setGender(updatedUser.getGender());
+                    if (updatedUser.getCompany()!=null){
+                        Optional<Company> companyOptional=this.companyService.getCompanyById(Long.valueOf(user.getCompany().getId()));
+                        user.setCompany(companyOptional.isPresent()?companyOptional.get():null);
+                    }
                     return userRepository.save(user);
                 }).orElseThrow(() -> new NoSuchElementException("User not found"));
+         return  currentUser;
     }
 
     @Override
@@ -115,6 +136,11 @@ public class UserServiceImpl implements UserService {
         resCreateUserDTO.setGender(user.getGender());
         resCreateUserDTO.setCreatedAt(user.getCreatedAt());
         resCreateUserDTO.setAddress(user.getAddress());
+        if (user.getCompany()!=null){
+            resCreateUserDTO.setCompanyUser(
+                    new ResCreateUserDTO.CompanyUser(user.getCompany().getId(),user.getCompany().getName())
+            );
+        }
         return resCreateUserDTO;
     }
     public  ResUserDTO convertUserToResUserDTO(User user) {
@@ -155,7 +181,15 @@ public class UserServiceImpl implements UserService {
                         item.getUpdatedAt(),
                         item.getCreatedAt(),
                         item.getGender(),
-                        item.getAddress()))
+                        item.getAddress(),
+                        item.getCompany() != null
+                                ? new ResUserDTO.CompanyUser(
+                                item.getCompany().getId(),
+                                item.getCompany().getName()
+                        ):null
+
+
+                        ))
                 .collect(Collectors.toList());
 
         ResultPaginationDTO resultPaginationDTO=new ResultPaginationDTO();

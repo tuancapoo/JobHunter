@@ -1,4 +1,0 @@
-### GET request to example server
-POST http://localhost:8080/api/v1/auth/logout
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJIdXllbkBnbWFpbC5jb20iLCJleHAiOjE3NjExMzgzOTksImlhdCI6MTc2MTA1MTk5OSwidXNlciI6eyJpZCI6MTAsImVtYWlsIjoiSHV5ZW5AZ21haWwuY29tIiwidXNlcm5hbWUiOiJIdXllbiJ9fQ.g_N-kSg6rFXiBFstE7PUHHStC8aqkxb59zjdNKV-tJ5BRNqhcEYtKuPp6ih6n4MPIp0TqoqPlvWJn_2377-lrg
-###

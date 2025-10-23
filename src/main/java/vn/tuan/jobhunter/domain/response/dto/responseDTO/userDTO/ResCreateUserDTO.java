@@ -30,5 +30,14 @@ public class ResCreateUserDTO {
     @Enumerated(EnumType.STRING)
     private GenderEnum gender;
     private String address;
+    @JsonProperty("company")
+    private CompanyUser companyUser;
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class CompanyUser{
+        private int id;
+        private String name;
+    }
 }

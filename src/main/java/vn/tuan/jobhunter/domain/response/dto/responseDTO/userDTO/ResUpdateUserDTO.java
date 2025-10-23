@@ -3,6 +3,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import vn.tuan.jobhunter.util.constant.GenderEnum;
@@ -20,4 +21,11 @@ public class ResUpdateUserDTO {
     @Enumerated(EnumType.STRING)
     private GenderEnum gender;
     private String address;
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class CompanyUser{
+        private int id;
+        private String name;
+    }
 }

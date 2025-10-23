@@ -165,8 +165,8 @@ public class AuthController {
                 .path("/")
                 .maxAge(0)
                 .build();
-        ApiResponse<Void> response=new ApiResponse<>(HttpStatus.OK,"Logout success",null,null);
-        return ResponseEntity.ok().body(response);
+        ApiResponse<Void> response=new ApiResponse<>(HttpStatus.OK,"Login success",null,null);
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,deleteCookie.toString()).body(response);
 
     }
 

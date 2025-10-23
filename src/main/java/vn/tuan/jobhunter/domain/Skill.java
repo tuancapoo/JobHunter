@@ -1,42 +1,30 @@
 package vn.tuan.jobhunter.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import vn.tuan.jobhunter.util.SecurityUtil;
 
 import java.time.Instant;
 import java.util.List;
 
 @Entity
-@Table(name="companies")
+@Table(name="skills")
 @Getter
 @Setter
-
-public class Company {
+public class Skill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotBlank(message = "name khong de trong")
     private String name;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
-    private String logo;
-
-
-    private String address;
-    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
     private Instant createdAt;
-    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
     private Instant updatedAt;
-    private  String createdBy;
-    private  String updatedBy;
+    private String createdBy;
+    private String updatedBy;
 
     @PrePersist
     public void handleCreateAt() {
@@ -54,17 +42,8 @@ public class Company {
 
     /////////mapping////////
     ///
-    // 1 Company- N User
-    @OneToMany(mappedBy = "company")
+    // N Job - N Skill
+    @ManyToMany
     @JsonIgnore
-    List<User> users;
-    // 1 Company - N Job
-    @OneToMany(mappedBy = "company")
-    @JsonIgnore
-    List<Job> jobs;
-
-
-
-
-
+    private List<Job> jobs;
 }

@@ -5,20 +5,27 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vn.tuan.jobhunter.domain.Company;
+import vn.tuan.jobhunter.domain.User;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResultPaginationDTO;
 import vn.tuan.jobhunter.domain.response.dto.criterial.CompanyCriteriaDTO;
 import vn.tuan.jobhunter.repository.CompanyRepository;
+import vn.tuan.jobhunter.repository.UserRepository;
 import vn.tuan.jobhunter.service.CompanyService;
+import vn.tuan.jobhunter.service.UserService;
 import vn.tuan.jobhunter.service.specification.CompanySpecification;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
-    public CompanyServiceImpl(CompanyRepository companyRepository) {
+    private final UserRepository userRepository;
+
+    public CompanyServiceImpl(CompanyRepository companyRepository, UserRepository userRepository) {
         this.companyRepository = companyRepository;
+        this.userRepository = userRepository;
     }
     @Override
     public Company createCompany(Company company) {
@@ -68,8 +75,14 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public void deleteCompany(Long id) {
-        if (!companyRepository.existsById(id)) {
-            throw new NoSuchElementException("User not found");
+        Optional<Company> companyOptional = companyRepository.findById(id);
+        if (!companyOptional.isPresent()) {
+            throw new NoSuchElementException("Company not found");
+        }
+        Company company = companyOptional.get();
+        List<User> users = company.getUsers();
+        for (User user : users) {
+            userRepository.deleteById(Long.valueOf(user.getId()));
         }
         companyRepository.deleteById(id);
     }
