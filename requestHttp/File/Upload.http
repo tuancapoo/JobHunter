@@ -1,0 +1,15 @@
+### GET request to example server
+POST http://localhost:8080/api/v1/files
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJwZXJtaXNzaW9uIjpbIlJPTEVfVVNFUl9DUkVBVEUiLCJST0xFX1VTRVJfVVBEQVRFIl0sImV4cCI6MTc2MTQwMzE2OSwiaWF0IjoxNzYxMzE2NzY5LCJ1c2VyIjp7ImlkIjo4LCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiVHVhbiJ9fQ.5xVd5VDboIHh1-Jbd7KZcHJhTxbKRym_opKx2O6OIpL1D5AjVtSacazL7HcBrdMVsjQVrGKdTPNzk2Wxfxe0yg
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="OIP.webp"
+Content-Type: image/webp
+
+< C:/Users/Tuan/Desktop/OIP.webp
+--WebAppBoundary
+Content-Disposition: form-data; name="folder"
+
+avatar
+--WebAppBoundary--
