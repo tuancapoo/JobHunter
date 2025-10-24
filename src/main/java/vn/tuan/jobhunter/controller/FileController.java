@@ -24,6 +24,7 @@ public class FileController {
         //createFolderIfNotExist
         fileService.createDirectory(folder);
         //store file
+        fileService.store(file, folder);
 
         return file.getOriginalFilename()+ folder;
 
