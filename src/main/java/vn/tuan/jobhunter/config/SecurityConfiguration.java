@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,7 +50,8 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         authz -> authz
-                                .requestMatchers("/","/api/v1/auth/login","/api/v1/auth/refresh","/api/v1/test").permitAll()
+                                .requestMatchers("/","/api/v1/auth/login","/api/v1/auth/refresh",
+                                        "/api/v1/test","/storage/**").permitAll()
                                 
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer((oauth2)->oauth2.jwt(Customizer.withDefaults())
@@ -98,6 +100,13 @@ public class SecurityConfiguration {
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
         return jwtAuthenticationConverter;
     }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        // Cấu hình Spring Security bỏ qua hoàn toàn các request này
+        // Nó sẽ không chạy qua SecurityFilterChain
+        return (web) -> web.ignoring().requestMatchers("/storage/**");
+    }
+
 
 
 }

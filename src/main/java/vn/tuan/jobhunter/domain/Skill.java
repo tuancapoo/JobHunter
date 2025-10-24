@@ -43,7 +43,7 @@ public class Skill {
     /////////mapping////////
     ///
     // N Job - N Skill
-    @ManyToMany
+    @ManyToMany(mappedBy = "skills")
     @JsonIgnore
     private List<Job> jobs;
 }

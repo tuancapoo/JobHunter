@@ -1,0 +1,6 @@
+### GET request to example server
+GET http://localhost:8080/api/v1/skills
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE3NjEyMjg2ODQsImlhdCI6MTc2MTE0MjI4NCwidXNlciI6eyJpZCI6OCwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJ1c2VybmFtZSI6IlR1YW4ifX0.XdNTu5JBHV5XJ1r3bbM5k5qgW_Wt7WEi6oPOllfjhnDKGarBmGpbyx0ZOi_karoPH5taM2ffN3bCrW8LI0SY9A
+
+
+###
