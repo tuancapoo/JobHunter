@@ -7,7 +7,7 @@ Content-Type: multipart/form-data; boundary=WebAppBoundary
 Content-Disposition: form-data; name="file"; filename="OIP.webp"
 Content-Type: image/webp
 
-< C:/Users/Tuan/Desktop/OIP.webp
+< C:/Users/Tuan/Desktop/2025101919081500-406E08C26FAE3D61E0FDD492A49B8D8E.jpg
 --WebAppBoundary
 Content-Disposition: form-data; name="folder"
 

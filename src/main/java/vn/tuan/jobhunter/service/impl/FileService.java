@@ -30,12 +30,13 @@ public class FileService {
         }
 
     }
-    public void store(MultipartFile file, String folder) {
+    public String store(MultipartFile file, String folder) {
         String fileName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
 
         Path path=Paths.get(basePath, folder, fileName);
         try(InputStream inputStream=file.getInputStream()){
             Files.copy(inputStream,path, StandardCopyOption.REPLACE_EXISTING);
+            return fileName;
         }
         catch (IOException e) {
             throw new RuntimeException("Cannot store file: " + path, e);
