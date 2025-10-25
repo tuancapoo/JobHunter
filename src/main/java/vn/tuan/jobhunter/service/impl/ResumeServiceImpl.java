@@ -83,6 +83,9 @@ public class ResumeServiceImpl implements ResumeService {
         resResumeDTO.setCreatedBy(resume.getCreatedBy());
         resResumeDTO.setUpdatedBy(resume.getUpdatedBy());
         resResumeDTO.setUpdatedAt(resume.getUpdatedAt());
+        if (resume.getJob()!=null) {
+            resResumeDTO.setCompanyName(resume.getJob().getCompany().getName());
+        }
         resResumeDTO.setUser(new ResResumeDTO.UserName(resume.getUser().getId(),resume.getUser().getUsername()));
         resResumeDTO.setJob(new ResResumeDTO.JobResume(resume.getJob().getId(),resume.getJob().getName()));
         return resResumeDTO;

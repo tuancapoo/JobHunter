@@ -66,4 +66,5 @@ public class CompanyController {
         ApiResponse<Company> response=new ApiResponse<>(HttpStatus.OK,"delete successful",null,null);
         return ResponseEntity.ok().body(response);
     }
+
 }

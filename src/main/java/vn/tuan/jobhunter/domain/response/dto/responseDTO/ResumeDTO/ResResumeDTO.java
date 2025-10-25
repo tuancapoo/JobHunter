@@ -28,6 +28,7 @@ public class ResResumeDTO {
 
     private UserName user;
     private JobResume job;
+    private String companyName;
 
     @Getter
     @Setter
