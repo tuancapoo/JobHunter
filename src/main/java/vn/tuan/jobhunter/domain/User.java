@@ -12,6 +12,7 @@ import vn.tuan.jobhunter.util.SecurityUtil;
 import vn.tuan.jobhunter.util.constant.GenderEnum;
 
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -67,6 +68,8 @@ public class User {
     @ManyToOne
     @JoinColumn(name="company_id")
     private Company company;
-
+    // 1 User-N resume
+    @OneToMany(mappedBy="user")
+    private List<Resume> resumes;
 
 }
