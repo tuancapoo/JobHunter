@@ -28,6 +28,9 @@ public class PermissionServiceImpl implements PermissionService {
         if (isPermissionExist(permission)) {
             throw new CustomException("Permission already exist");
         }
+        if ((permissionRepository.existsByName(permission.getName())) ) {
+            throw new CustomException("Permission Name already exist");
+        }
         return permissionRepository.save(permission);
     }
 
@@ -41,6 +44,9 @@ public class PermissionServiceImpl implements PermissionService {
         }
         if (isPermissionExist(permission)) {
             throw new CustomException("Permission already exist");
+        }
+        if (!permissionOptional.get().equals(permission) &&(permissionRepository.existsByName(permission.getName())) ) {
+            throw new CustomException("Permission Name already exist");
         }
         Permission updated=permissionOptional
                 .map(per -> {

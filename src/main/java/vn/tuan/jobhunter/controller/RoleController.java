@@ -12,6 +12,7 @@ import vn.tuan.jobhunter.domain.Role;
 import vn.tuan.jobhunter.domain.response.ApiResponse;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.JobDTO.ResJobDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResultPaginationDTO;
+import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResUserDTO;
 import vn.tuan.jobhunter.service.RoleService;
 import vn.tuan.jobhunter.service.impl.RoleServiceImpl;
 
@@ -49,5 +50,18 @@ public class RoleController {
         ApiResponse<Void> result = new ApiResponse<>(HttpStatus.OK, "delete successful", null, null);
         return ResponseEntity.ok().body(result);
     }
+    @GetMapping("/roles/{id}")
+    public ResponseEntity<ApiResponse<Role>> getRoleById(@PathVariable int id){
+        return roleService.getRoleById(id).map(role -> {
+            var response = new ApiResponse<>(HttpStatus.OK, "getUserById", role  , null);
+            return ResponseEntity.ok(response);
+
+        }).orElseGet(() -> {
+            ApiResponse<Role> errorResponse = new ApiResponse<>(HttpStatus.NOT_FOUND,
+                    "Không tìm thấy user với ID: " + id, null, "USER_NOT_FOUND");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        });
+    }
+
 
 }
