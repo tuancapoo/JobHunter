@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vn.tuan.jobhunter.controller.errors.CustomException;
+import vn.tuan.jobhunter.domain.Company;
 import vn.tuan.jobhunter.domain.Resume;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResultPaginationDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResumeDTO.ResResumeCreateDTO;
@@ -14,6 +15,8 @@ import vn.tuan.jobhunter.repository.JobRepository;
 import vn.tuan.jobhunter.repository.ResumeRepository;
 import vn.tuan.jobhunter.repository.UserRepository;
 import vn.tuan.jobhunter.service.ResumeService;
+import vn.tuan.jobhunter.service.specification.GenericSpecification;
+import vn.tuan.jobhunter.util.SecurityUtil;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -105,5 +108,31 @@ public class ResumeServiceImpl implements ResumeService {
         return resultPaginationDTO;
 
     }
+    public ResultPaginationDTO getResumeByUser(Pageable pageable){
+        String email = SecurityUtil.getCurrentUserLogin().isPresent()
+                ? SecurityUtil.getCurrentUserLogin().get()
+                : "";
+
+        Specification<Resume> spec = Specification.where(null);
+        spec = spec.and(GenericSpecification.equals("email", SecurityUtil.getCurrentUserLogin()));
+        Page<Resume> page=resumeRepository.findAll(spec,pageable);
+
+        List<ResResumeDTO> users=page.getContent()
+                .stream().map(item-> convertToResumeDTO(item))
+                .collect(Collectors.toList());
+
+        ResultPaginationDTO resultPaginationDTO=new ResultPaginationDTO();
+
+        ResultPaginationDTO.Meta mt=new ResultPaginationDTO.Meta();
+        mt.setPage(page.getNumber()+1);
+        mt.setPageSize(page.getSize());
+
+        mt.setPages(page.getTotalPages());
+        mt.setTotal(page.getNumberOfElements());
+
+        resultPaginationDTO.setMeta(mt);
+        resultPaginationDTO.setResult(users);
+        return resultPaginationDTO;
+    };
 
 }

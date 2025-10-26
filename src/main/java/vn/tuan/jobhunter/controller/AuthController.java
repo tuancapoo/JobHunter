@@ -52,10 +52,10 @@ public class AuthController {
         ResLoginDTO resLoginDTO=new ResLoginDTO();
 
         User user=userService.getUserByEmail(requestLoginDTO.getUsername());
-        resLoginDTO.setUser(resLoginDTO.new UserLogin(user.getId(), user.getEmail(), user.getUsername()));
+        resLoginDTO.setUser(resLoginDTO.new UserLogin(user.getId(), user.getEmail(), user.getUsername(),user.getRole()));
 
         //create acess token
-        String access_token=securityUtil.createAccessToken(authentication.getName(),resLoginDTO.getUser());
+        String access_token=securityUtil.createAccessToken(authentication.getName(),resLoginDTO);
 
 
 
@@ -91,7 +91,7 @@ public class AuthController {
         User currentUser=userService.getUserByEmail(email);
         ResLoginDTO.UserGetAccount userGetAccount=null;
         if(currentUser!=null){
-            ResLoginDTO.UserLogin user= resLoginDTO.new UserLogin(currentUser.getId(), currentUser.getEmail(), currentUser.getUsername());
+            ResLoginDTO.UserLogin user= resLoginDTO.new UserLogin(currentUser.getId(), currentUser.getEmail(), currentUser.getUsername(),currentUser.getRole());
             userGetAccount= resLoginDTO.new UserGetAccount(user);
         }
 
@@ -121,10 +121,10 @@ public class AuthController {
         ResLoginDTO resLoginDTO=new ResLoginDTO();
 
         User user=userService.getUserByEmail(email);
-        resLoginDTO.setUser(resLoginDTO.new UserLogin(user.getId(), user.getEmail(), user.getUsername()));
+        resLoginDTO.setUser(resLoginDTO.new UserLogin(user.getId(), user.getEmail(), user.getUsername(), user.getRole()));
 
         //create acess token
-        String access_token=securityUtil.createAccessToken(email,resLoginDTO.getUser());
+        String access_token=securityUtil.createAccessToken(email,resLoginDTO);
         resLoginDTO.setAccessToken(access_token);
 
         //create refreshtoken

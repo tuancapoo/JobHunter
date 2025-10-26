@@ -69,4 +69,16 @@ public class ResumeController {
         ApiResponse<ResultPaginationDTO> response=new ApiResponse<>(HttpStatus.OK,"get all users",result,null);
         return ResponseEntity.ok().body(response);
     }
+    @GetMapping("/resumes/by-user")
+    public ResponseEntity<ApiResponse<ResultPaginationDTO>> getResumesByUser(
+            @Filter Specification<Resume> specification,
+            Pageable pageable
+            //@ModelAttribute UserCriteriaDTO userCriteriaDTO
+    ){
+        //ResultPaginationDTO result= userService.getAllUsers(userCriteriaDTO,pageable);
+        ResultPaginationDTO result= resumeService.getAllResumes(specification,pageable);
+        ApiResponse<ResultPaginationDTO> response=new ApiResponse<>(HttpStatus.OK,"get all users",result,null);
+        return ResponseEntity.ok().body(response);
+    }
+
 }

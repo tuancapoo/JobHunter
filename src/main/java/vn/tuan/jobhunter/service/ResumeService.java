@@ -20,5 +20,6 @@ public interface ResumeService {
     public Optional<Resume> getResumeById(Long id);
     public ResResumeDTO convertToResumeDTO(Resume resume);
     public ResultPaginationDTO getAllResumes(Specification<Resume> spec, Pageable pageable);
+    public ResultPaginationDTO getResumeByUser(Pageable pageable);
 
 }
