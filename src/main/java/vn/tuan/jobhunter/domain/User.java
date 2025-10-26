@@ -62,6 +62,8 @@ public class User {
     }
 
 
+
+
     //
     /////////mapping////////
     // N User - 1 Company
@@ -71,5 +73,9 @@ public class User {
     // 1 User-N resume
     @OneToMany(mappedBy="user")
     private List<Resume> resumes;
+    // NUser-1Role
+    @ManyToOne
+    @JoinColumn(name="role_id")
+    private Role role;
 
 }

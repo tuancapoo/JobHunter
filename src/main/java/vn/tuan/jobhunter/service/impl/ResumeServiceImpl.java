@@ -1,28 +1,20 @@
 package vn.tuan.jobhunter.service.impl;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vn.tuan.jobhunter.controller.errors.CustomException;
 import vn.tuan.jobhunter.domain.Resume;
-import vn.tuan.jobhunter.domain.User;
-import vn.tuan.jobhunter.domain.response.dto.criterial.UserCriteriaDTO;
-import vn.tuan.jobhunter.domain.response.dto.responseDTO.JobDTO.ResJobDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResultPaginationDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResumeDTO.ResResumeCreateDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResumeDTO.ResResumeDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResumeDTO.ResUpdateResumeDTO;
-import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResUserDTO;
 import vn.tuan.jobhunter.repository.JobRepository;
 import vn.tuan.jobhunter.repository.ResumeRepository;
 import vn.tuan.jobhunter.repository.UserRepository;
 import vn.tuan.jobhunter.service.ResumeService;
-import vn.tuan.jobhunter.service.specification.UserSpecification;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -40,10 +32,10 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     public ResResumeCreateDTO createResume(Resume resume) {
-        if (resume.getUser()==null || userRepository.existsById(Long.valueOf(resume.getUser().getId()))) {
+        if (resume.getUser()==null || !userRepository.existsById(Long.valueOf(resume.getUser().getId()))) {
             throw new CustomException("User not found");
         }
-        if (resume.getJob()==null || jobRepository.existsById(Long.valueOf(resume.getJob().getId()))) {
+        if (resume.getJob()==null || !jobRepository.existsById(Long.valueOf(resume.getJob().getId()))) {
             throw new CustomException("Job not found");
         }
         resume=resumeRepository.save(resume);
@@ -56,8 +48,8 @@ public class ResumeServiceImpl implements ResumeService {
         }
         Resume updated=resumeRepository.findById(Long.valueOf(resume.getId()))
                 .map(job -> {
-                    if (resume.getState()!=null) {
-                        job.setState(resume.getState());
+                    if (resume.getStatus()!=null) {
+                        job.setStatus(resume.getStatus());
                     }
                     return resumeRepository.save(job);
                 }).orElseThrow(() -> new NoSuchElementException("Skill not found"));
@@ -76,9 +68,10 @@ public class ResumeServiceImpl implements ResumeService {
     }
     public ResResumeDTO convertToResumeDTO(Resume resume) {
         ResResumeDTO resResumeDTO=new ResResumeDTO();
-        resResumeDTO.setId(resResumeDTO.getId());
+        resResumeDTO.setId(Long.valueOf(resume.getId()));
         resResumeDTO.setEmail(resume.getEmail());
         resResumeDTO.setUrl(resume.getUrl());
+        resResumeDTO.setStatus(resume.getStatus());
         resResumeDTO.setCreatedAt(resume.getCreatedAt());
         resResumeDTO.setCreatedBy(resume.getCreatedBy());
         resResumeDTO.setUpdatedBy(resume.getUpdatedBy());

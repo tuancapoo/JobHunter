@@ -64,4 +64,5 @@ public class SkillController {
         ApiResponse<Void> result = new ApiResponse<>(HttpStatus.OK, "delete successful", null, null);
         return ResponseEntity.ok().body(result);
     }
+
 }

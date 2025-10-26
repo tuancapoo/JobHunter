@@ -7,12 +7,16 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.tuan.jobhunter.controller.errors.CustomException;
+import vn.tuan.jobhunter.domain.Company;
 import vn.tuan.jobhunter.domain.Job;
 import vn.tuan.jobhunter.domain.Skill;
 import vn.tuan.jobhunter.domain.response.ApiResponse;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.JobDTO.ResCreateJob;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.JobDTO.ResJobDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResultPaginationDTO;
+import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResumeDTO.ResResumeDTO;
+import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResUserDTO;
 import vn.tuan.jobhunter.repository.JobRepository;
 import vn.tuan.jobhunter.service.JobService;
 
@@ -53,4 +57,18 @@ public class JobController {
         ApiResponse<ResultPaginationDTO> response=new ApiResponse<>(HttpStatus.OK,"get all users",result,null);
         return ResponseEntity.ok().body(response);
     }
+    @GetMapping("/jobs/{id}")
+    public ResponseEntity<ApiResponse<Job>> getAJob(@PathVariable Long id){
+        return jobService.getJobById(id)
+                .map(job -> {
+                    var response = new ApiResponse<>(HttpStatus.OK, "get job successfully", job  , null);
+                    return ResponseEntity.ok(response);
+                })
+                .orElseGet(() -> {
+                    var errorResponse = new ApiResponse<Job>(HttpStatus.NOT_FOUND,
+                    "Không tìm thấy user với ID: " + id, null, "USER_NOT_FOUND");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        });
+    }
+
 }

@@ -1,0 +1,15 @@
+### GET request to example server
+POST localhost:8080/api/v1/roles
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJwZXJtaXNzaW9uIjpbIlJPTEVfVVNFUl9DUkVBVEUiLCJST0xFX1VTRVJfVVBEQVRFIl0sImV4cCI6MTc2MTU3NzgyNSwiaWF0IjoxNzYxNDkxNDI1LCJ1c2VyIjp7ImlkIjo4LCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiVHVhbiJ9fQ.DpMWW5bZnAqoI1ncFxONtjMG1e9368UQfAJs1mI3vt_kwCbUxO3sJw8gXN1YTU-eVHPyDlSR20m6TGtgusRfvQ
+Content-Type: application/json
+
+{
+  "name": "admin2",
+  "description": "vai trò admin",
+  "active": true,
+  "permissions": [
+    {"id": 1},
+    {"id":  2}
+  ]
+}
+###

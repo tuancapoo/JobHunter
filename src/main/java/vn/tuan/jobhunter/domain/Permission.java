@@ -1,35 +1,31 @@
 package vn.tuan.jobhunter.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import vn.tuan.jobhunter.util.SecurityUtil;
-import vn.tuan.jobhunter.util.constant.ResumeStateEnum;
 
 import java.time.Instant;
+import java.util.List;
 
 @Entity
-@Table(name="resumes")
 @Getter
 @Setter
-public class Resume {
+@Table(name="permissions")
+public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @NotBlank(message = "email mà để trống à")
-    private String email;
-
-    @NotBlank(message = "url còn để trống thì upload cái j v?")
-    private String url;
-
-    @Enumerated(EnumType.STRING)
-    private ResumeStateEnum status;
-
-    private Instant startTime;
-    private Instant endTime;
-
+    @NotBlank(message="name khong de trong")
+    private String name;
+    @NotBlank(message = "apiPath khong de trong")
+    private String apiPath;
+    @NotBlank(message = "method khong de trong")
+    private String method;
+    @NotBlank(message = "module khong de trong")
+    private String module;
     private String createdBy;
     private Instant createdAt;
     private String updatedBy;
@@ -47,16 +43,11 @@ public class Resume {
         this.updatedBy =SecurityUtil.getCurrentUserLogin().isPresent()==true?
                 SecurityUtil.getCurrentUserLogin().get():null;
     }
-    // N resume - 1 user
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name="job_id")
-    private Job job;
 
 
 
+    @ManyToMany(mappedBy = "permissions")
+    @JsonIgnore
+    private List<Role> roles;
 
 }

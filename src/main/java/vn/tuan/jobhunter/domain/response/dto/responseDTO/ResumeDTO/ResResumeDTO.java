@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import vn.tuan.jobhunter.domain.Resume;
+import vn.tuan.jobhunter.util.constant.ResumeStateEnum;
 
 import java.time.Instant;
 
@@ -20,6 +20,7 @@ public class ResResumeDTO {
     private String url;
 
     @Enumerated(EnumType.STRING)
+    private ResumeStateEnum status;
     private Instant createdAt;
     private Instant updatedAt;
 
