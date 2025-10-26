@@ -17,6 +17,7 @@ import vn.tuan.jobhunter.domain.response.ApiResponse;
 import vn.tuan.jobhunter.domain.User;
 import vn.tuan.jobhunter.domain.request.requestLoginDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResLoginDTO;
+import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResCreateUserDTO;
 import vn.tuan.jobhunter.service.UserService;
 import vn.tuan.jobhunter.util.SecurityUtil;
 
@@ -174,6 +175,14 @@ public class AuthController {
     public ResponseEntity<ApiResponse<String>>  test(){
 
         ApiResponse<String> response=new ApiResponse<>(HttpStatus.OK,"TestSuccess",null,null);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/auth/register")
+    public ResponseEntity<ApiResponse<ResCreateUserDTO>> creatUser(
+            @Valid @RequestBody User user){
+        ResCreateUserDTO createdUser = userService.createUser(user);
+        ApiResponse<ResCreateUserDTO> response=new ApiResponse<>(HttpStatus.CREATED,"create successful",createdUser,null);
         return ResponseEntity.ok().body(response);
     }
 }
