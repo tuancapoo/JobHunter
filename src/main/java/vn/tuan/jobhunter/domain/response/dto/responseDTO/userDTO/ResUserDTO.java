@@ -27,10 +27,19 @@ public class ResUserDTO {
     private String address;
     @JsonProperty("company")
     private CompanyUser companyUser;
+    private RoleUser role;
+
     @Getter
     @Setter
     @AllArgsConstructor
     public static class CompanyUser{
+        private int id;
+        private String name;
+    }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class RoleUser{
         private int id;
         private String name;
     }

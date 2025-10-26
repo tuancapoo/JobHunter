@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.tuan.jobhunter.domain.Company;
+import vn.tuan.jobhunter.domain.Role;
 import vn.tuan.jobhunter.domain.User;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResCreateUserDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResUpdateUserDTO;
@@ -13,8 +14,10 @@ import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResUserDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResultPaginationDTO;
 import vn.tuan.jobhunter.domain.response.dto.criterial.UserCriteriaDTO;
 import vn.tuan.jobhunter.repository.CompanyRepository;
+import vn.tuan.jobhunter.repository.RoleRepository;
 import vn.tuan.jobhunter.repository.UserRepository;
 import vn.tuan.jobhunter.service.CompanyService;
+import vn.tuan.jobhunter.service.RoleService;
 import vn.tuan.jobhunter.service.specification.UserSpecification;
 import vn.tuan.jobhunter.service.UserService;
 
@@ -30,20 +33,28 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CompanyService companyService;
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, CompanyService companyService) {
+    private final RoleRepository roleRepository;
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, CompanyService companyService, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.companyService = companyService;
+        this.roleRepository = roleRepository;
     }
 
     @Override
     public ResCreateUserDTO createUser(User user) {
+
         if (userRepository.existsByEmail(user.getEmail())){
             throw new RuntimeException("User already exists");
         }
         if (user.getCompany()!=null){
             Optional<Company> companyOptional=this.companyService.getCompanyById(Long.valueOf(user.getCompany().getId()));
             user.setCompany(companyOptional.isPresent()?companyOptional.get():null);
+        }
+        //check role
+        if (user.getRole()!=null){
+            Optional<Role> roleOptional=this.roleRepository.findById(user.getRole().getId());
+            user.setRole(roleOptional.isPresent()?roleOptional.get():null);
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -68,8 +79,14 @@ public class UserServiceImpl implements UserService {
                                 ? new ResUserDTO.CompanyUser(
                                 item.getCompany().getId(),
                                 item.getCompany().getName()
+                        ): null,
+                        item.getRole()!=null
+                                ? new ResUserDTO.RoleUser(
+                                        item.getRole().getId(),
+                                        item.getCompany().getName()
+                        ):null
                         )
-                                : null))
+                )
                 .collect(Collectors.toList());
 
         ResultPaginationDTO resultPaginationDTO=new ResultPaginationDTO();
@@ -107,8 +124,12 @@ public class UserServiceImpl implements UserService {
                     if (updatedUser.getGender()!=null)
                         user.setGender(updatedUser.getGender());
                     if (updatedUser.getCompany()!=null){
-                        Optional<Company> companyOptional=this.companyService.getCompanyById(Long.valueOf(user.getCompany().getId()));
+                        Optional<Company> companyOptional=this.companyService.getCompanyById(Long.valueOf(updatedUser.getCompany().getId()));
                         user.setCompany(companyOptional.isPresent()?companyOptional.get():null);
+                    }
+                    if (updatedUser.getRole()!=null){
+                        Optional<Role> roleOptional=this.roleRepository.findById(updatedUser.getRole().getId());
+                        user.setRole(roleOptional.isPresent()?roleOptional.get():null);
                     }
                     return userRepository.save(user);
                 }).orElseThrow(() -> new NoSuchElementException("User not found"));
@@ -186,10 +207,14 @@ public class UserServiceImpl implements UserService {
                                 ? new ResUserDTO.CompanyUser(
                                 item.getCompany().getId(),
                                 item.getCompany().getName()
-                        ):null
-
-
-                        ))
+                        ): null,
+                                item.getRole()!=null
+                                        ? new ResUserDTO.RoleUser(
+                                        item.getRole().getId(),
+                                        item.getCompany().getName()
+                                ):null
+                        )
+                )
                 .collect(Collectors.toList());
 
         ResultPaginationDTO resultPaginationDTO=new ResultPaginationDTO();
