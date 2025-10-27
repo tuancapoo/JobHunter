@@ -10,6 +10,7 @@ import vn.tuan.jobhunter.domain.User;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResultPaginationDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResUserDTO;
 import vn.tuan.jobhunter.repository.SkillRepository;
+import vn.tuan.jobhunter.repository.SubscriberRepository;
 import vn.tuan.jobhunter.service.SkillService;
 
 import java.util.List;
@@ -21,8 +22,10 @@ import java.util.stream.Collectors;
 public class SkillServiceImpl implements SkillService {
     private final SkillRepository skillRepository;
 
-    public SkillServiceImpl(SkillRepository skillRepository) {
+    private final SubscriberRepository subscriberRepository;
+    public SkillServiceImpl(SkillRepository skillRepository, SubscriberRepository subscriberRepository) {
         this.skillRepository = skillRepository;
+        this.subscriberRepository = subscriberRepository;
     }
     public Skill createSkill(Skill skill) {
         if (skillRepository.existsByName(skill.getName())) {
@@ -69,6 +72,9 @@ public class SkillServiceImpl implements SkillService {
         }
         Skill currentSkill=skill.get();
         currentSkill.getJobs().forEach(j->j.getSkills().remove(currentSkill));
+
+        currentSkill.getSubscribers().forEach(j->j.getSkills().remove(currentSkill));
+
 
         skillRepository.deleteById(id);
     }
