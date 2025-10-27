@@ -15,7 +15,7 @@ public class EmailController {
     }
     @GetMapping("/email")
     public String sendEmail() {
-        emailService.sendSimpleMail("tuan.nguyencapoo@hcmut.edu.vn","Test","Hello World");
+        this.emailService.sendEmailSync("tuan.nguyencapoo@hcmut.edu.vn","test send email","<h1><b>Chào bạn</b></h1>",false,true);
         return "ok";
     }
 
