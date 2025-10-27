@@ -9,15 +9,12 @@ import vn.tuan.jobhunter.domain.Company;
 import vn.tuan.jobhunter.domain.Role;
 import vn.tuan.jobhunter.domain.User;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResCreateUserDTO;
-import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResUpdateUserDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.userDTO.ResUserDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResultPaginationDTO;
 import vn.tuan.jobhunter.domain.response.dto.criterial.UserCriteriaDTO;
-import vn.tuan.jobhunter.repository.CompanyRepository;
 import vn.tuan.jobhunter.repository.RoleRepository;
 import vn.tuan.jobhunter.repository.UserRepository;
 import vn.tuan.jobhunter.service.CompanyService;
-import vn.tuan.jobhunter.service.RoleService;
 import vn.tuan.jobhunter.service.specification.UserSpecification;
 import vn.tuan.jobhunter.service.UserService;
 

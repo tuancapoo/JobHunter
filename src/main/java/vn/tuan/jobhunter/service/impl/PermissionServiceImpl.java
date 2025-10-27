@@ -42,9 +42,7 @@ public class PermissionServiceImpl implements PermissionService {
         if (!permissionOptional.isPresent()) {
             throw new CustomException("Permission not found");
         }
-        if (isPermissionExist(permission)) {
-            throw new CustomException("Permission already exist");
-        }
+
         if (!permissionOptional.get().equals(permission) &&(permissionRepository.existsByName(permission.getName())) ) {
             throw new CustomException("Permission Name already exist");
         }

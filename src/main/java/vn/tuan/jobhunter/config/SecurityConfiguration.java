@@ -49,7 +49,7 @@ public class SecurityConfiguration {
                 "/api/v1/test",
                 "/storage/**",
                 "/api/v1/companies/**","/api/v1/jobs/**",
-                "/api/v1/register"};
+                "/api/v1/auth/register"};
         http
 
                 .csrf(c->c.disable())

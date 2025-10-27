@@ -14,5 +14,5 @@ public interface RoleService {
     public Role updateRole(Role role);
     public ResultPaginationDTO getAllRoles(Specification<Role> spec, Pageable pageable);
     public void deleteRole(int id);
-    public Optional<Role> getRoleById(int id)
+    public Optional<Role> getRoleById(int id);
 }
