@@ -2,6 +2,7 @@ package vn.tuan.jobhunter.service.impl;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -10,20 +11,25 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import vn.tuan.jobhunter.domain.Job;
+import vn.tuan.jobhunter.repository.JobRepository;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Service
 public class EmailServiceImpl {
     private final MailSender mailSender;
     private final JavaMailSender javaMailSender;
     private final TemplateEngine templateEngine;
-
-    public EmailServiceImpl(JavaMailSender javaMailSender, MailSender mailSender, TemplateEngine templateEngine) {
+    private final JobRepository jobRepository;
+    public EmailServiceImpl(JavaMailSender javaMailSender, MailSender mailSender,
+                            TemplateEngine templateEngine, JobRepository jobRepository) {
 
         this.mailSender = mailSender;
         this.javaMailSender = javaMailSender;
         this.templateEngine = templateEngine;
+        this.jobRepository = jobRepository;
     }
 //    public void sendSimpleMail(String to, String subject, String text) {
 //        SimpleMailMessage message = new SimpleMailMessage();
@@ -47,11 +53,21 @@ public class EmailServiceImpl {
             System.out.println("ERROR SEND EMAIL: " + e);
         }
     }
+
     public void sendEmailFromTemplateSync(String to, String subject, String templateName) {
         Context context = new Context();
+        List<Job> arrJob=this.jobRepository.findAll();
+        String name="Tuan";
+        context.setVariable("name",name);
+        context.setVariable("jobs",arrJob);
+
+
+
         String content = this.templateEngine.process(templateName, context);
         this.sendEmailSync(to, subject, content, false, true);
     }
+
+
 
 
 
