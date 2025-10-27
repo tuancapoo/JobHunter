@@ -208,7 +208,7 @@ public class UserServiceImpl implements UserService {
                                 item.getRole()!=null
                                         ? new ResUserDTO.RoleUser(
                                         item.getRole().getId(),
-                                        item.getCompany().getName()
+                                        item.getRole().getName()
                                 ):null
                         )
                 )

@@ -1,11 +1,16 @@
 package vn.tuan.jobhunter.service.impl;
 
+import com.turkraft.springfilter.builder.FilterBuilder;
+import com.turkraft.springfilter.converter.FilterSpecificationConverter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vn.tuan.jobhunter.controller.errors.CustomException;
+import vn.tuan.jobhunter.domain.Company;
+import vn.tuan.jobhunter.domain.Job;
 import vn.tuan.jobhunter.domain.Resume;
+import vn.tuan.jobhunter.domain.User;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResultPaginationDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResumeDTO.ResResumeCreateDTO;
 import vn.tuan.jobhunter.domain.response.dto.responseDTO.ResumeDTO.ResResumeDTO;
@@ -27,10 +32,15 @@ public class ResumeServiceImpl implements ResumeService {
     private final ResumeRepository resumeRepository;
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
-    public ResumeServiceImpl(ResumeRepository resumeRepository, JobRepository jobRepository, UserRepository userRepository) {
+    private final FilterSpecificationConverter filterSpecificationConverter;
+    private final FilterBuilder filterBuilder;
+
+    public ResumeServiceImpl(ResumeRepository resumeRepository, JobRepository jobRepository, UserRepository userRepository, FilterSpecificationConverter filterSpecificationConverter, FilterBuilder filterBuilder) {
         this.resumeRepository = resumeRepository;
         this.jobRepository = jobRepository;
         this.userRepository = userRepository;
+        this.filterSpecificationConverter = filterSpecificationConverter;
+        this.filterBuilder = filterBuilder;
     }
 
     public ResResumeCreateDTO createResume(Resume resume) {
@@ -87,6 +97,26 @@ public class ResumeServiceImpl implements ResumeService {
     }
     @Override
     public ResultPaginationDTO getAllResumes(Specification<Resume> spec, Pageable pageable) {
+        String email = SecurityUtil.getCurrentUserLogin().isPresent()
+                ? SecurityUtil.getCurrentUserLogin().get()
+                : "";
+        List<Integer> arrJobIds;
+        User currentUser=userRepository.findByEmail(email);
+        if (currentUser!=null) {
+            Company userCompany=currentUser.getCompany();
+            if (userCompany!=null) {
+                List<Job> companyJobs=userCompany.getJobs();
+                if (companyJobs!=null && companyJobs.size()>0) {
+                    arrJobIds=companyJobs.stream().map(x->x.getId()).collect(Collectors.toList());
+                    Specification<Resume> jobInSpec = (root, query, cb) -> root.get("job").get("id").in(arrJobIds);
+                    spec=jobInSpec.and(spec);
+
+                }
+
+            }
+
+        }
+
         Page<Resume> page=resumeRepository.findAll(spec,pageable);
 
         List<ResResumeDTO> users=page.getContent()
