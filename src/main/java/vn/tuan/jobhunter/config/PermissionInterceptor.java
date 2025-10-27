@@ -49,13 +49,17 @@ public class PermissionInterceptor implements HandlerInterceptor {
                     boolean isAllow = permissionList.stream().anyMatch(
                             item -> item.getMethod().equals(httpMethod) && item.getApiPath().equals(path)
                     );
-                    if (isAllow) {
-                        return true;
+                    if (isAllow==false) {
+                        throw new CustomException("Permission not allowed");
+
                     }
+
+                }
+                else {
+                    throw new CustomException("Permission not allowed");
                 }
             }
         }
-        throw new CustomException("Permission not allowed");
-
+        return true;
     }
 }

@@ -19,6 +19,8 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	//mail
+	implementation("org.springframework.boot:spring-boot-starter-mail")
 
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 
@@ -35,6 +37,7 @@ dependencies {
 	annotationProcessor("org.hibernate.orm:hibernate-jpamodelgen:6.4.0.Final")
 	//filter
 	implementation("com.turkraft.springfilter:jpa:3.1.7")
+
 }
 
 tasks.withType<Test> {
