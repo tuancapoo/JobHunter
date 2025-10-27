@@ -46,4 +46,9 @@ public class Skill {
     @ManyToMany(mappedBy = "skills")
     @JsonIgnore
     private List<Job> jobs;
+
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "skills")
+    @JsonIgnore
+    private List<Subscriber> subscribers;
 }
