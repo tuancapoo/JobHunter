@@ -15,7 +15,8 @@ public class EmailController {
     }
     @GetMapping("/email")
     public String sendEmail() {
-        this.emailService.sendEmailSync("tuan.nguyencapoo@hcmut.edu.vn","test send email","<h1><b>Chào bạn</b></h1>",false,true);
+        //this.emailService.sendEmailSync("tuan.nguyencapoo@hcmut.edu.vn","test send email","<h1><b>Chào bạn</b></h1>",false,true);
+        this.emailService.sendEmailFromTemplateSync("tuan.nguyencapoo@hcmut.edu.vn","test send email","job");
         return "ok";
     }
 
